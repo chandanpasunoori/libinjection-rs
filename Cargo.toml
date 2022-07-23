@@ -1,19 +1,19 @@
 [package]
-name = "libinjection"
-version = "0.2.5"
-authors = ["Navid <yaa110@gmail.com>"]
+name = "libinjection-rs"
+version = "0.2.6"
+authors = ["Navid <yaa110@gmail.com>", "Chandan Pasunoori <chandanpasunoori@gmail.com>"]
 license = "MIT/Apache-2.0"
 readme = "README.md"
 keywords = ["sqli", "xss", "injection"]
-repository = "https://github.com/arvancloud/libinjection-rs"
-homepage = "https://github.com/arvancloud/libinjection-rs"
-documentation = "https://docs.rs/libinjection"
-description = "Rust bindings for libinjection"
+repository = "https://github.com/chandanpasunoori/libinjection-rs"
+homepage = "https://github.com/chandanpasunoori/libinjection-rs"
+documentation = "https://docs.rs/libinjection-rs"
+description = "Rust bindings for libinjection from libinjection/libinjection fork"
 categories = ["api-bindings", "external-ffi-bindings"]
 
 
 [badges]
-travis-ci = { repository = "arvancloud/libinjection-rs" }
+travis-ci = { repository = "chandanpasunoori/libinjection-rs" }
 
 [build-dependencies]
 bindgen = "0.55"

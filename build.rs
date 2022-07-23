@@ -3,13 +3,12 @@ extern crate git2;
 extern crate regex;
 
 use git2::Repository;
-use regex::Regex;
 use std::env;
 use std::fs::remove_dir_all;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-const LIBINJECTION_URL: &'static str = "https://github.com/client9/libinjection";
+const LIBINJECTION_URL: &'static str = "https://github.com/libinjection/libinjection";
 const BUILD_DIR_NAME: &'static str = "libinjection";
 
 fn clone_libinjection(build_dir: &Path, version: &str) -> Option<()> {
@@ -32,35 +31,16 @@ fn run_make(rule: &str, cwd: &Path) -> bool {
     }
 }
 
-fn fix_python_version() -> Option<()> {
-    if if let Ok(output) = Command::new("python").arg("-V").output() {
-        let python_version = String::from_utf8_lossy(&output.stdout).to_string();
-        !Regex::new("Python 2.*")
-            .ok()?
-            .is_match(python_version.as_str())
-    } else {
-        true
-    } {
-        let cwd = env::current_dir().ok()?;
-        if !run_make("fix-python", cwd.as_path()) {
-            return None;
-        }
-    }
-    Some(())
-}
-
 fn main() {
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+
+    println!("out_path {}", out_path.display());
     let mut build_parent_dir = out_path.join(BUILD_DIR_NAME);
 
     let _ = remove_dir_all(build_parent_dir.as_path());
 
     if clone_libinjection(build_parent_dir.as_path(), "v3.10.0").is_none() {
         panic!("unable to clone libinjection");
-    }
-
-    if fix_python_version().is_none() {
-        panic!("unable to fix python version");
     }
 
     build_parent_dir.push("src");
