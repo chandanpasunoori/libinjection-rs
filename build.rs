@@ -3,6 +3,7 @@ extern crate git2;
 extern crate regex;
 
 use git2::Repository;
+use git2::build::CheckoutBuilder;
 use std::env;
 use std::fs::remove_dir_all;
 use std::path::{Path, PathBuf};
@@ -14,7 +15,10 @@ const BUILD_DIR_NAME: &'static str = "libinjection";
 fn clone_libinjection(build_dir: &Path, version: &str) -> Option<()> {
     let repo = Repository::clone(LIBINJECTION_URL, build_dir).ok()?;
     let rev = repo.revparse_single(version).ok()?;
-    repo.set_head_detached(rev.id()).ok()
+    repo.set_head_detached(rev.id()).ok();
+    let mut binding = CheckoutBuilder::new();
+    let cb = binding.force();
+    repo.checkout_head(Some(cb)).ok()
 }
 
 fn run_make(rule: &str, cwd: &Path) -> bool {
@@ -44,6 +48,7 @@ fn main() {
     }
 
     build_parent_dir.push("src");
+    println!("repo directory {}", build_parent_dir.as_path().display());
     if !run_make("all", build_parent_dir.as_path()) {
         panic!("unable to make libinjection");
     }
