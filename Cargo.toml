@@ -1,6 +1,6 @@
 [package]
 name = "libinjection-rs"
-version = "0.2.7"
+version = "0.2.8"
 authors = ["Navid <yaa110@gmail.com>", "Chandan Pasunoori <chandanpasunoori@gmail.com>"]
 license = "MIT/Apache-2.0"
 readme = "README.md"
