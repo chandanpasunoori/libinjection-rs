@@ -1,6 +1,6 @@
-extern crate libinjection;
+extern crate libinjection_rs;
 
-use libinjection::{sqli, xss};
+use libinjection_rs::{sqli, xss};
 
 #[test]
 fn test_sqli() {

@@ -1,8 +1,8 @@
 [package]
 name = "libinjection-rs"
-version = "0.2.8"
+version = "0.2.9"
 authors = ["Navid <yaa110@gmail.com>", "Chandan Pasunoori <chandanpasunoori@gmail.com>"]
-license = "MIT/Apache-2.0"
+license = "MIT"
 readme = "README.md"
 keywords = ["sqli", "xss", "injection"]
 repository = "https://github.com/chandanpasunoori/libinjection-rs"
