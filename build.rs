@@ -53,29 +53,48 @@ fn fix_python_version() -> Option<()> {
     Some(())
 }
 
-fn main() {
+fn copy_repo() -> Option<()> {
+
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
 
     println!("out_path {}", out_path.display());
     let mut build_parent_dir = out_path.join(BUILD_DIR_NAME);
 
+    let output = Command::new("cp")
+        .arg("-r")
+        .arg("/Users/cp/projects/libinjection")
+        .arg(build_parent_dir)
+        .output()
+        .unwrap();
+    if output.status.success() {
+        Some(())
+    } else {
+        panic!("make error: {}", String::from_utf8_lossy(&output.stderr));
+    }
+}
+
+fn main() {
+    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+
+    let mut build_parent_dir = out_path.join(BUILD_DIR_NAME);
+
     let _ = remove_dir_all(build_parent_dir.as_path());
 
-    if clone_libinjection(build_parent_dir.as_path(), "v3.10.0").is_none() {
-        panic!("unable to clone libinjection");
-    }
+    println!("repo directory {}", build_parent_dir.as_path().display());
 
-    if fix_python_version().is_none() {
-        panic!("unable to fix python version");
+    if copy_repo().is_none() {
+        panic!("unable to copy repo");
     }
 
     build_parent_dir.push("src");
-    println!("repo directory {}", build_parent_dir.as_path().display());
     if !run_make("all", build_parent_dir.as_path()) {
         panic!("unable to make libinjection");
     }
 
+    let usrlibpath = PathBuf::from("/usr/local/lib");
+
     println!("cargo:rustc-link-lib=static=injection");
+    println!("cargo:rustc-link-search={}", usrlibpath.display());
     println!("cargo:rustc-link-search={}", build_parent_dir.display());
 
     let h_path = build_parent_dir.join("libinjection.h");
